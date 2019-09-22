@@ -1,0 +1,17 @@
+{
+  "name": "tonik-backend",
+  "version": "1.0.0",
+  "description": "backend server for tonik.io",
+  "main": "server.js",
+  "scripts": {
+    "start": "pm2-runtime server.js -i max",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Keoni Murray",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.7.1",
+    "pm2": "^3.5.1"
+  }
+}
