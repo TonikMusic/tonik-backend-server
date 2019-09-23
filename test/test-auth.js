@@ -22,10 +22,10 @@ describe('remove data from database', () => {
         it('should return json and status code of 200', (done) => {
             fakeArtist = {
                 "email":"keonimurray10@gmail.com",
-                "fullName": "Keoni Murray",
+                "fullName":"Keoni Murray",
                 'userName':"k tha rapper",
-                'socialMedia':['https://twitter.com/home?lang=en'],
                 'password': 'Key1999010',
+                'dob': 'september 21 1999',
                 'artist': true,
 
             }
@@ -34,7 +34,7 @@ describe('remove data from database', () => {
             .send(fakeArtist)
             .end((err, res) => {
                 res.should.have.status(200);
-                res.body.should.be.a('object');
+                // res.body.should.be.a('object');
                 done();
             })
             
@@ -43,7 +43,25 @@ describe('remove data from database', () => {
     });
 
     describe('test signup route for invalid input', () => {
-        it('should ')
+        it('should return json with status code 422', (done) => {
+            fakeInput = {
+                'email': 'keonimurray.com',
+                'fullName': '12345',
+                'userName': '1',
+                'password': '12345',
+                'dob': "12345",
+                'artist': true,
+            }
+
+            chai.request(server)
+            .post('/api/v0/auth/user/signup')
+            .send(fakeInput)
+            .end((err, res) => {
+                res.should.have.status(422);
+                res.body.should.be.a('object');
+                done();
+            })
+        })
         
     });
     

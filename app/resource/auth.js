@@ -2,39 +2,33 @@ const validator = require("validator");
 const Artist = require('../models/artist');
 const Fan = require('../models/fans');
 
-const validateSignupInput = (fullname, dob, email, userName,socialMediaUrls=null, password) => {   
-    checkFullname = validator.isAlpha(fullname)
-    checkEmail = validator.isEmail(email)
-    checkUserName = validator.isAlphanumeric(userName)
-    checkPassword = validator.isAlphanumeric(password)
-    
-    //validate social media url is url
-    if(socialMediaUrls !== null){
-        for (socialMediaUrl in socialMediaUrls){
-            checkSocialMedia = validator.isURL(socialMediaUrl)
-            if(checkSocialMedia == false){
-                return false;
-            }
-}
-    
-} 
-    //check if user is over 13
-    if(dob < 2008){
-        return false
-}   else if(checkPassword == false || password.length < 10){
-        return false
 
-}
-    //validate user input
-    else if(checkFullname == false || checkEmail == false || checkUserName == false){
+const checkPassword = (password) => {
+    const validatePassword = validator.isAlphanumeric(password)
+    if(validatePassword == false || password.length < 10){
         return false
-}   else{
-        return true
-}
     }
+    return true
 
+}
+const validateSignupInput = (fullname, dob, email, userName, password) => {   
+    // checkUserName = validator.isAlphanumeric(userName)
+    console.log("****validate params***",fullname, dob, email, userName, password)
+    const checkFullname = validator.isAlpha(validator.blacklist(fullname, ' '));
+    const checkEmail = validator.isEmail(email);
+    const checkDob = validator.isAlphanumeric(validator.blacklist(dob, ' '));
 
-async function createArtistAccount(fullname, dob, email, userName,password, socialMedia=null){
+        
+    console.log("***What's False***",checkFullname,checkEmail,checkDob,checkPassword(password))
+
+    if(checkFullname == false || checkEmail == false || checkPassword(password) == false ||checkDob == false){
+        return false 
+    }else{
+        return true 
+    }
+}
+
+async function createArtistAccount(fullname, dob, email, userName,password){
     try {
         //create new artist bluprint
         newArtist = new Artist({
@@ -42,7 +36,6 @@ async function createArtistAccount(fullname, dob, email, userName,password, soci
             dob:dob,
             email:email,
             userName:userName,
-            socialMedias:socialMedia,
             password: password
         });
     //save artist to db
@@ -56,7 +49,7 @@ async function createArtistAccount(fullname, dob, email, userName,password, soci
 }
 
 
-async function createFanAccount(fullname, dob, email, userName,password){
+async function createFanAccount(fullname, dob, email, userName,password){ 
     try {
         newFan = new Fan({
             fullName:fullname,
@@ -77,7 +70,6 @@ async function createFanAccount(fullname, dob, email, userName,password){
         
     }
 }
-    
 
 module.exports = {validateSignupInput, createArtistAccount, createFanAccount}
 
