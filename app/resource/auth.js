@@ -13,7 +13,6 @@ const checkPassword = (password) => {
 }
 const validateSignupInput = (fullname, dob, email, userName, password) => {   
     // checkUserName = validator.isAlphanumeric(userName)
-    console.log("****validate params***",fullname, dob, email, userName, password)
     const checkFullname = validator.isAlpha(validator.blacklist(fullname, ' '));
     const checkEmail = validator.isEmail(email);
     const checkDob = validator.isAlphanumeric(validator.blacklist(dob, ' '));
