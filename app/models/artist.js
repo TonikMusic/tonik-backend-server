@@ -32,7 +32,7 @@ ArtistSchema = new Schema({
         required: true
     },
     
-    artistHandle:{
+    userName:{
         type:String, 
         required:true,
         unique: true
@@ -61,7 +61,7 @@ ArtistSchema = new Schema({
 
     donators: [{type:mongoose.Schema.Types.ObjectId, ref: 'Fans' }],
 
-    socialMedia:[String],
+    socialMedias:[String],
 
     supporters: [{type:mongoose.Schema.Types.ObjectId, ref: 'Fans' }],
 
