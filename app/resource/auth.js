@@ -1,6 +1,7 @@
 const validator = require("validator");
 const Artist = require('../models/artist');
 const Fan = require('../models/fans');
+const jwt = require('jsonwebtoken');
 
 
 const checkPassword = (password) => {
@@ -16,9 +17,6 @@ const validateSignupInput = (fullname, dob, email, userName, password) => {
     const checkFullname = validator.isAlpha(validator.blacklist(fullname, ' '));
     const checkEmail = validator.isEmail(email);
     const checkDob = validator.isAlphanumeric(validator.blacklist(dob, ' '));
-
-        
-    console.log("***What's False***",checkFullname,checkEmail,checkDob,checkPassword(password))
 
     if(checkFullname == false || checkEmail == false || checkPassword(password) == false ||checkDob == false){
         return false 
@@ -70,5 +68,46 @@ async function createFanAccount(fullname, dob, email, userName,password){
     }
 }
 
-module.exports = {validateSignupInput, createArtistAccount, createFanAccount}
+const validateLogin = (email, password) => {
+   validatePassword = checkPassword(password);
+   validateEmail = validator.isEmail(email);
+
+   if(checkPassword == false|| validateEmail == false){
+       return false
+   }
+   return true
+    
+}
+
+
+async function findUser (email,  artist){
+
+    if(artist == true){
+       findArtist = await Artist.findOne({email: email});
+       if(findArtist == null){return false}
+       return findArtist
+}else{
+    findFan = await Fan.findOne({email:email});
+    if(findFan == null){return false}
+    return findFan
+}
+}
+
+const verifyToken = (token) => {
+    jwt.verify(token, process.env.SECRECT, (err) => {
+        if(err){
+            console.error("ERROR VERIFYING TOKEN", err);
+            return false;
+        }
+        return true;
+    });
+
+
+
+}
+
+
+
+
+module.exports = {validateSignupInput, createArtistAccount, createFanAccount,validateLogin,findUser, verifyToken}
 

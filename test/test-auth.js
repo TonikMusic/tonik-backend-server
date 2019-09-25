@@ -3,7 +3,7 @@ const chaiHttp = require('chai-http');
 const server = require('../server');
 const should = chai.should();
 const artist = require('..//app/models/artist');
-// const fan = require('../models/fans');
+const fan = require('../models/fans');
 
 
 
@@ -12,8 +12,21 @@ chai.use(chaiHttp);
 describe('remove data from database', () => {
     beforeEach((done) => {
         artist.remove({}, (err) =>{
+            if(err){
+                console.log(err);
+            }
             done()
+        });
+
+        fan.remove({}, (err) => {
+            if(err){
+                console.log("---ERROR---", err);
+            }
+            done()
+
         })
+
+
         
     });
 
@@ -34,7 +47,7 @@ describe('remove data from database', () => {
             .send(fakeArtist)
             .end((err, res) => {
                 res.should.have.status(200);
-                // res.body.should.be.a('object');
+                res.body.should.be.a('object');
                 done();
             })
             
@@ -62,6 +75,32 @@ describe('remove data from database', () => {
                 done();
             })
         })
+        
+    });
+
+    describe('test signup route for fans', () => {
+        it('should return status code of 200 and a jwt token ', (done) => {
+            fakeFan = {
+
+                "email":"keonimurray11@gmail.com",
+                "fullName":"Keoni Murray",
+                'userName':"random fan",
+                'password': 'Key1999010Z',
+                'dob': 'september 21 1999',
+                'artist': false,
+
+            }
+
+            chai.request(server)
+            .post('/api/v0/auth/user/signup')
+            .send(fakeFan)
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                done();
+            });
+
+        });
         
     });
     

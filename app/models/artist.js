@@ -58,14 +58,14 @@ ArtistSchema = new Schema({
         default: 0
 
     },
-
+    socialMedias:[{type:String, default: null}],
+    
     donators: [{type:mongoose.Schema.Types.ObjectId, ref: 'Fans' }],
 
-    socialMedias:[{type:String, default: null}],
-
     supporters: [{type:mongoose.Schema.Types.ObjectId, ref: 'Fans' }],
-
+    
     following: [{type:mongoose.Schema.Types.ObjectId, ref: 'Fans' }], 
+    
     foloowers: [{type:mongoose.Schema.Types.ObjectId, ref: 'Fans' }], 
 
 
