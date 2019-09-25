@@ -1,6 +1,9 @@
 const auth = require('../resource/auth')
 const  bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const artist = require('..//resource/artist');
+const request = require('request');
+
 module.exports = app => {
 
     app.post('/api/v0/auth/user/signup', async(req, res) => {
@@ -32,15 +35,31 @@ module.exports = app => {
         if(user == false|| auth.validateLogin(body[0], body[1]) == false){
             res.status(412).send({"message": "could not find user"})
         }else{
-            bcrypt.compare(body[1], user.password, (err, result) => {
+            bcrypt.compare(body[1], user.password, async (err, result) => {
                 if(err || !result){
                     res.status(422).send({'message': "wrong password"});
                 }else{
                     token = jwt.sign({_id: user._id},process.env.SECRECT,{expiresIn: "15 hr"});
-                    res.setHeader('Authorization', token)
                     if(body[2] == true){
-                        res.header( 'x-authorization', token);
-                        res.redirect(301,`/api/v0/${user._id}/profile`)
+                        try{
+                            const url = `http://localhost:5000/api/v0/${user._id}/profile`
+                            await request({headers:{'x-authorization': token},uri: url,method:'GET'}, function(error, response,body){
+                                const jsonParse = JSON.parse(body)
+                                console.log("----body----", jsonParse);
+                                jsonParse['password'] = null;
+                                res.json(jsonParse)
+                        
+                            });
+                        }catch(error){
+                            console.error("ERROR GETING:", error);
+                            res.status(500).send({
+                                        'message': 'server error with login'
+                                    });
+
+
+                        }
+                        
+                        
 
                     }
 

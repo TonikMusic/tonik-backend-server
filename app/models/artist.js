@@ -60,13 +60,13 @@ ArtistSchema = new Schema({
     },
     socialMedias:[{type:String, default: null}],
     
-    donators: [{type:mongoose.Schema.Types.ObjectId, ref: 'Fans' }],
+    donators: [{type:mongoose.Schema.Types.ObjectId, ref: 'Fan' }],
 
-    supporters: [{type:mongoose.Schema.Types.ObjectId, ref: 'Fans' }],
+    supporters: [{type:mongoose.Schema.Types.ObjectId, ref: 'Fan' }],
     
-    following: [{type:mongoose.Schema.Types.ObjectId, ref: 'Fans' }], 
+    following: [{type:mongoose.Schema.Types.ObjectId, ref: 'Fan' }], 
     
-    foloowers: [{type:mongoose.Schema.Types.ObjectId, ref: 'Fans' }], 
+    foloowers: [{type:mongoose.Schema.Types.ObjectId, ref: 'Fan' }], 
 
 
 
