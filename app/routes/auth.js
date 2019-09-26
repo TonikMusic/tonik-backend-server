@@ -39,7 +39,7 @@ module.exports = app => {
                     token = jwt.sign({_id: user._id},process.env.SECRECT,{expiresIn: "15 hr"});
                     if(body[2]){
                         try{
-                            const url = `http://localhost:5000/api/v0/${user._id}/profile`
+                            const url = `https://tonik-server-test.herokuapp.com/api/v0/${user._id}/profile`
                             await request({headers:{'x-authorization': token},uri: url,method:'GET'}, function(error, response,body){
                                 const jsonParse = JSON.parse(body)
                                 res.json(jsonParse);
@@ -55,7 +55,7 @@ module.exports = app => {
                         }}else{
                         try{
                             
-                            const url = `http://localhost:5000/api/v0/view/${user._id}/profile`
+                            const url = `https://tonik-server-test.herokuapp.com/api/v0/view/${user._id}/profile`
                             await request({headers:{'x-authorization': token},uri: url,method:'GET'}, function(error, response, body){
 
                                 const jsonParse = JSON.parse(body);
