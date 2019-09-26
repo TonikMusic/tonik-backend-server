@@ -10,10 +10,14 @@ COPY package.json /app
 COPY . /app
 
 # Install Node.js
-EXPOSE 8002
+EXPOSE 5000
 
 # install dependicies 
 RUN npm install .
+
+RUN npm start
+
+
 
 
 

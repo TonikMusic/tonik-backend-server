@@ -12,11 +12,13 @@ const checkPassword = (password) => {
     return true
 
 }
-const validateSignupInput = (fullname, dob, email, userName, password) => {   
+
+const validateSignupInput = (fullname, dob, email, password) => {   
     // checkUserName = validator.isAlphanumeric(userName)
     const checkFullname = validator.isAlpha(validator.blacklist(fullname, ' '));
     const checkEmail = validator.isEmail(email);
     const checkDob = validator.isAlphanumeric(validator.blacklist(dob, ' '));
+    console.log("----CHECK----", checkDob,checkEmail, checkFullname)
 
     if(checkFullname == false || checkEmail == false || checkPassword(password) == false ||checkDob == false){
         return false 
@@ -45,7 +47,6 @@ async function createArtistAccount(fullname, dob, email, userName,password){
 
 }
 
-
 async function createFanAccount(fullname, dob, email, userName,password){ 
     try {
         newFan = new Fan({
@@ -71,14 +72,12 @@ async function createFanAccount(fullname, dob, email, userName,password){
 const validateLogin = (email, password) => {
    validatePassword = checkPassword(password);
    validateEmail = validator.isEmail(email);
-
    if(checkPassword == false|| validateEmail == false){
        return false
    }
    return true
     
 }
-
 
 async function findUser (email,  artist){
 
@@ -93,8 +92,9 @@ async function findUser (email,  artist){
 }
 }
 
-const verifyToken = (token) => {
-    jwt.verify(token, process.env.SECRECT, (err) => {
+const verifyToken = async(token) => {
+    console.log("---TOKEN---", token);
+    await jwt.verify(token, process.env.SECRECT, (err) => {
         if(err){
             console.error("ERROR VERIFYING TOKEN", err);
             return false;
@@ -109,5 +109,10 @@ const verifyToken = (token) => {
 
 
 
-module.exports = {validateSignupInput, createArtistAccount, createFanAccount,validateLogin,findUser, verifyToken}
+module.exports = {validateSignupInput, 
+    createArtistAccount, 
+    createFanAccount,
+    validateLogin,
+    findUser, 
+    verifyToken}
 

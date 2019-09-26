@@ -38,9 +38,8 @@ password:{
     required: true
 },
 
-artistSupported:{
-    artist: [{type: mongoose.Schema.Types.ObjectId, ref: 'Artist' }]
-},
+artistSupported: [{type: mongoose.Schema.Types.ObjectId, ref: 'Artist' }],
+
 
 following: [{type:mongoose.Schema.Types.ObjectId, ref: 'Artist' }], 
 

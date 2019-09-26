@@ -1,23 +1,20 @@
 const auth = require('../resource/auth')
 const  bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const artist = require('..//resource/artist');
 const request = require('request');
 
 module.exports = app => {
 
     app.post('/api/v0/auth/user/signup', async(req, res) => {
-        body = [req.body.fullName, req.body.email, req.body.dob,req.body.userName, req.body.password];
-        if(auth.validateSignupInput(body[0],body[2], body[1],body[3], body[4]) == false){
+        body = [req.body.fullName, req.body.email, req.body.dob,req.body.userName, req.body.password, rew.body.artist];
+        if(auth.validateSignupInput(body[0],body[2], body[1], body[4]) == false){
             res.status(422).send({
                 'message': 'invalid input'
             })
         }
         else{
-            console.log("-----HAS BEEN HIt---")
             const hash = await bcrypt.hash(body[4], 10);
-            console.log("----hash----", hash);
-            if(req.body.artist == true){
+            if(body[5]){
               saveArtist = await  auth.createArtistAccount(body[0],body[2], body[1],body[3],hash);
               token = jwt.sign({_id: saveArtist._id}, process.env.SECRECT, {expiresIn: "15 hr"});
               res.json({'token':token}).status(200)
@@ -40,14 +37,12 @@ module.exports = app => {
                     res.status(422).send({'message': "wrong password"});
                 }else{
                     token = jwt.sign({_id: user._id},process.env.SECRECT,{expiresIn: "15 hr"});
-                    if(body[2] == true){
+                    if(body[2]){
                         try{
                             const url = `http://localhost:5000/api/v0/${user._id}/profile`
                             await request({headers:{'x-authorization': token},uri: url,method:'GET'}, function(error, response,body){
                                 const jsonParse = JSON.parse(body)
-                                console.log("----body----", jsonParse);
-                                jsonParse['password'] = null;
-                                res.json(jsonParse)
+                                res.json(jsonParse);
                         
                             });
                         }catch(error){
@@ -57,14 +52,25 @@ module.exports = app => {
                                     });
 
 
-                        }
-                        
-                        
+                        }}else{
+                        try{
+                            
+                            const url = `http://localhost:5000/api/v0/view/${user._id}/profile`
+                            await request({headers:{'x-authorization': token},uri: url,method:'GET'}, function(error, response, body){
 
+                                const jsonParse = JSON.parse(body);
+                                res.json(jsonParse);
+
+                            })
+
+                        }catch(error){
+                            console.error("ERROR GETING:", error);
+                            res.status(500).send({
+                                        'message': 'server error with login'
+                                    });
+
+                        }}
                     }
-
-
-                }
             })
 
         }

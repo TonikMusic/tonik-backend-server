@@ -41,4 +41,4 @@ AblumSchema = new Schema({
 
 })
 
-module.exports = mongoose.model("Album", AlbumSchema);
+module.exports = mongoose.model("Album", AblumSchema);
