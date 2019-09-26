@@ -31,7 +31,7 @@ module.exports = app => {
         body = [req.body.email,req.body.password, req.body.artist];
         user = await auth.findUser(body[0], body[2]);
         if(user == false|| auth.validateLogin(body[0], body[1]) == false){
-            res.status(412).send({"message": "could not find user"})
+            res.status(412).send({"message": "invalid input"})
         }else{
             bcrypt.compare(body[1], user.password, async (err, result) => {
                 if(err || !result){
@@ -42,7 +42,9 @@ module.exports = app => {
                         try{
                             const url = `https://tonik-server-test.herokuapp.com/api/v0/${user._id}/profile`
                             await request({headers:{'x-authorization': token},uri: url,method:'GET'}, function(error, response,body){
-                                const jsonParse = JSON.parse(body)
+
+                                const jsonParse = JSON.parse(body);
+                                delete jsonParse['password']
                                 res.json(jsonParse);
                         
                             });
@@ -60,6 +62,7 @@ module.exports = app => {
                             await request({headers:{'x-authorization': token},uri: url,method:'GET'}, function(error, response, body){
 
                                 const jsonParse = JSON.parse(body);
+                                delete jsonParse['password']
                                 res.json(jsonParse);
 
                             })
