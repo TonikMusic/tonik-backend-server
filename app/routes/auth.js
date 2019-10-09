@@ -8,6 +8,7 @@ module.exports = app => {
 
     app.post('/api/v0/auth/user/signup', async(req, res) => {
         body = [req.body.fullName, req.body.email, req.body.dob,req.body.userName, req.body.password, req.body.artist];
+        console.log("---BODY---",body);
         if(auth.validateSignupInput(body[0],body[2], body[1], body[4]) == false){
             res.status(422).send({
                 'message': 'invalid input'
