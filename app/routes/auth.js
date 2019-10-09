@@ -3,7 +3,7 @@ const  bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const request = require('request');
 
-//
+
 module.exports = app => {
 
     app.post('/api/v0/auth/user/signup', async(req, res) => {
